@@ -4,6 +4,7 @@ Lab 2 by Stadnik Oleksandr and Yaryna Zabchuk
 
 def read_incidence_matrix(filename: str) -> list[list]:
     """
+    Stanik Oleksandr
     :param str filename: path to file
     :returns list[list]: the incidence matrix of a given graph
     """
@@ -12,6 +13,7 @@ def read_incidence_matrix(filename: str) -> list[list]:
 
 def read_adjacency_matrix(filename: str) -> list[list]:
     """
+    Yaryna Zabchuk
     :param str filename: path to file
     :returns list[list]: the adjacency matrix of a given graph
     """
@@ -20,6 +22,7 @@ def read_adjacency_matrix(filename: str) -> list[list]:
 
 def read_adjacency_dict(filename: str) -> dict[int, list[int]]:
     """
+    Yanryna Zabchuk
     :param str filename: path to file
     :returns dict: the adjacency dict of a given graph
     """
@@ -28,6 +31,7 @@ def read_adjacency_dict(filename: str) -> dict[int, list[int]]:
 
 def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
+    Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -41,6 +45,7 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
 
 def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     """
+    Yanryna Zabchuk
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -54,6 +59,7 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
 
 def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
+    Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -67,6 +73,7 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
 
 def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[int]:
     """
+    Yanryna Zabchuk
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -80,6 +87,7 @@ def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[in
 
 def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
+    Stadnik Oleksandr
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
@@ -93,6 +101,7 @@ def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
 
 def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
     """
+    Stanik Oleksandr
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
@@ -106,6 +115,7 @@ def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[in
 
 def recursive_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
+    Stadnik Oleksandr
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
@@ -119,6 +129,7 @@ def recursive_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
 
 def recursive_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
     """
+    Stanik Oleksandr
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
