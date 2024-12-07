@@ -1,6 +1,7 @@
 """
 Lab 2 by Stadnik Oleksandr and Yaryna Zabchuk
 """
+from collections import deque
 
 def read_incidence_matrix(filename: str) -> list[list]:
     """
@@ -8,7 +9,27 @@ def read_incidence_matrix(filename: str) -> list[list]:
     :param str filename: path to file
     :returns list[list]: the incidence matrix of a given graph
     """
-    pass
+    with open(filename, 'r', encoding='utf-8') as file:
+        file = file.readlines()[1:-1]
+        edges = []
+        vertices = set()
+        for line in file:
+            line = line.strip().replace("->", '').replace(';', '').split()
+            start, end = int(line[0]), int(line[1])
+            vertices.add(start)
+            vertices.add(end)
+            edges.append((start, end))
+
+        vertices = sorted(vertices)
+        matrix = [[0 for _ in range(len(edges))] for _ in range(len(vertices))]
+
+        for edge_index, (start, end) in enumerate(edges):
+            if start == end:
+                matrix[start][edge_index] = 2
+            else:
+                matrix[start][edge_index] = 1
+                matrix[end][edge_index] = -1
+        return matrix
 
 
 def read_adjacency_matrix(filename: str) -> list[list]:
@@ -84,7 +105,6 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
                 stack.append(n)
 
     return res
-
 
 
 def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
@@ -191,7 +211,19 @@ def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
     >>> iterative_adjacency_dict_bfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0)
     [0, 1, 2, 3]
     """
-    pass
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    bfs_order = []
+
+    while queue:
+        vertex = queue.popleft()
+        bfs_order.append(vertex)
+        for neighbour in graph[vertex]:
+            if neighbour not in visited:
+                queue.append(neighbour)
+                visited.add(neighbour)
+    return bfs_order
 
 
 def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
@@ -205,35 +237,19 @@ def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[in
     >>> iterative_adjacency_matrix_bfs([[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]], 0)
     [0, 1, 2, 3]
     """
-    pass
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    bfs_order = []
 
-
-def recursive_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
-    """
-    Stadnik Oleksandr
-    :param list[list] graph: the adjacency list of a given graph
-    :param int start: start vertex of search
-    :returns list[int]: the bfs traversal of the graph
-    >>> recursive_adjacency_dict_bfs({0: [1, 2], 1: [0, 2], 2: [0, 1]}, 0)
-    [0, 1, 2]
-    >>> recursive_adjacency_dict_bfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0)
-    [0, 1, 2, 3]
-    """
-    pass
-
-
-def recursive_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
-    """
-    Stanik Oleksandr
-    :param dict graph: the adjacency matrix of a given graph
-    :param int start: start vertex of search
-    :returns list[int]: the bfs traversal of the graph
-    >>> recursive_adjacency_matrix_bfs([[0, 1, 1], [1, 0, 1], [1, 1, 0]], 0)
-    [0, 1, 2]
-    >>> recursive_adjacency_matrix_bfs([[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]], 0)
-    [0, 1, 2, 3]
-    """
-    pass
+    while queue:
+        vertex = queue.popleft()
+        bfs_order.append(vertex)
+        for neighbour in range(len(graph)):
+            if graph[vertex][neighbour] and neighbour not in visited:
+                queue.append(neighbour)
+                visited.add(neighbour)
+    return bfs_order
 
 
 def adjacency_matrix_radius(graph: list[list]) -> int:
