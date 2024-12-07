@@ -258,10 +258,31 @@ def adjacency_matrix_radius(graph: list[list]) -> int:
     :returns int: the radius of the graph
     >>> adjacency_matrix_radius([[0, 1, 1], [1, 0, 1], [1, 1, 0]])
     1
-    >>> adjacency_matrix_radius([[0, 1, 1], [1, 0, 1], [1, 1, 0], [0, 1, 0]])
-    2
+    >>> adjacency_matrix_radius([[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1], [1, 0, 0, 0]])
+    3
     """
-    pass
+    def find_distanses(graph, vertex):
+        queue = [vertex]
+        distanses = {ver:float("inf") for ver in range(len(graph))}
+        distanses[vertex] = 0
+
+        while queue:
+            cur_vertex = queue.pop(0)
+
+            for i, adj_ver in enumerate(graph[cur_vertex]):
+                if adj_ver and distanses[i] == float('inf'):
+                    if distanses[i] > distanses[cur_vertex] + 1:
+                        distanses[i] = distanses[cur_vertex] + 1
+                        queue.append(i)
+        return distanses
+
+    eccentricities = []
+
+    for ver in range(len(graph)):
+        dist_ver = find_distanses(graph, ver)
+        eccentricities.append(max(dist_ver.values()))
+
+    return min(eccentricities)
 
 
 def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
@@ -273,7 +294,28 @@ def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
     >>> adjacency_dict_radius({0: [1, 2], 1: [0, 2], 2: [0, 1], 3: [1]})
     2
     """
-    pass
+    def find_distanses(graph, vertex):
+        queue = [vertex]
+        distanses = {ver:float('inf') for ver in range(len(graph))}
+        distanses[vertex] = 0
+
+        while queue:
+            cur_vertex = queue.pop(0)
+
+            for adj_ver in graph[cur_vertex]:
+                if distanses[adj_ver] == float('inf'):
+                    if distanses[adj_ver] > distanses[cur_vertex] + 1:
+                        distanses[adj_ver] = distanses[cur_vertex] + 1
+                        queue.append(adj_ver)
+        return distanses
+
+    eccentricities = []
+
+    for ver in graph:
+        dist_ver = find_distanses(graph, ver)
+        eccentricities.append(max(dist_ver.values()))
+
+    return min(eccentricities)
 
 
 if __name__ == "__main__":
