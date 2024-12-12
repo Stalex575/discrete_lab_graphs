@@ -74,14 +74,14 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
     stack = [start]
     res = []
 
-    while len(stack) != 0:
-        v = stack[0]
-        stack.remove(v)
-        visited[v] = True
-        res.append(v)
-        for n in range(num_vertises):
-            if n in graph[v] and n not in res and n not in stack:
-                stack.append(n)
+    while stack:
+        v = stack.pop(0)
+        if not visited[v]:
+            visited[v] = True
+            res.append(v)
+            for n in graph[v]:
+                if not visited[n]:
+                    stack.append(n)
 
     return res
 
@@ -98,20 +98,20 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     >>> iterative_adjacency_matrix_dfs([[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]], 0)
     [0, 1, 2, 3]
     """
-    num_vertises = len(graph)
+    num_vertices = len(graph)
 
-    visited = [0] * num_vertises
+    visited = [0] * num_vertices
     stack = [start]
     res = []
 
     while len(stack) != 0:
-        v = stack[0]
-        stack.remove(v)
-        visited[v] = True
-        res.append(v)
-        for n in range(num_vertises):
-            if graph[v][n] and n not in res and n not in stack:
-                stack.append(n)
+        v = stack.pop(0)
+        if not visited[v]:
+            visited[v] = True
+            res.append(v)
+            for n in range(num_vertices):
+                if graph[v][n] and not visited[n]:
+                    stack.append(n)
 
     return res
 
@@ -139,9 +139,13 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_ori
         """
         visited[v] = True
         res.append(v)
-        for neighbor in range(num_vertises):
-            if neighbor in graph[v] and not visited[neighbor]:
-                dfs(neighbor, res)
+        for neighbor in graph[v]:
+            if not visited[neighbor]:
+                if is_oriented:
+                    if neighbor in graph[v]:
+                        dfs(neighbor, res)
+                else:
+                    dfs(neighbor, res)
 
     dfs(start, res)
 
