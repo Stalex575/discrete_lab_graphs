@@ -2,6 +2,53 @@
 Lab 2 by Stadnik Oleksandr and Yaryna Zabchuk
 """
 from collections import deque
+import time
+import matplotlib.pyplot as plt
+
+execution_times = {}
+
+def time_it(func):
+    """
+    Decorator that measures the execution time of a function.
+    
+    :param function func: the function to be measured
+    :returns function: the wrapper function
+    """
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
+        if func.__name__ not in execution_times:
+            execution_times[func.__name__] = []
+        execution_times[func.__name__].append(elapsed_time)
+
+        return result
+    return wrapper
+
+
+def generate_chart(exec_times):
+    """
+    Generates a bar chart of the average execution times of the functions.
+    
+    :param dict exec_times: a dictionary containing the execution times of the functions
+    """
+    func_names = list(exec_times.keys())
+    avg_times = [sum(times) / len(times) for times in exec_times.values()]
+
+    print("Function names:", func_names)
+    print("Average times:", avg_times)
+
+    plt.figure(figsize=(12, 8))  # Adjust the figure size to make it larger
+    plt.bar(func_names, avg_times)
+    plt.xlabel('Function', fontsize=14)
+    plt.ylabel('Average Execution Time (seconds)', fontsize=14)
+    plt.title('Average Execution Time of Functions', fontsize=16)
+    plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotate x-tick labels and adjust font size
+    plt.tight_layout()  # Adjust layout to fit everything nicely
+    plt.show()
+
 
 def read_incidence_matrix(filename: str) -> list[list]:
     """
@@ -30,7 +77,6 @@ def read_incidence_matrix(filename: str) -> list[list]:
                 matrix[start][edge_index] = 1
                 matrix[end][edge_index] = -1
         return matrix
-
 
 def read_adjacency_matrix(filename: str) -> list[list]:
     """
@@ -77,7 +123,7 @@ def read_adjacency_dict(filename: str) -> dict[int, list[int]]:
                 res[top1].append(top2)
     return res
 
-
+@time_it
 def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
     Yaryna Zabchuk
@@ -106,7 +152,7 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
 
     return res
 
-
+@time_it
 def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     """
     Yanryna Zabchuk
@@ -135,7 +181,7 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
 
     return res
 
-
+@time_it
 def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_oriented: bool) -> list[int]:
     """
     Yaryna Zabchuk
@@ -167,7 +213,7 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_ori
 
     return res
 
-
+@time_it
 def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[int]:
     """
     Yanryna Zabchuk
@@ -199,7 +245,7 @@ def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[in
 
     return res
 
-
+@time_it
 def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
     Stadnik Oleksandr
@@ -225,7 +271,7 @@ def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
                 visited.add(neighbour)
     return bfs_order
 
-
+@time_it
 def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
     """
     Stanik Oleksandr
@@ -251,7 +297,7 @@ def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[in
                 visited.add(neighbour)
     return bfs_order
 
-
+@time_it
 def adjacency_matrix_radius(graph: list[list]) -> int:
     """
     :param list[list] graph: the adjacency matrix of a given graph
@@ -284,7 +330,7 @@ def adjacency_matrix_radius(graph: list[list]) -> int:
 
     return min(eccentricities)
 
-
+@time_it
 def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
     """
     :param dict graph: the adjacency list of a given graph
@@ -318,6 +364,22 @@ def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
     return min(eccentricities)
 
 
+
 if __name__ == "__main__":
+    FILE_NAME = 'input.dot'
+
+    adjacency_matrix = read_adjacency_matrix(FILE_NAME)
+    adjacency_dict = read_adjacency_dict(FILE_NAME)
+
+    adjacency_matrix_radius(adjacency_matrix)
+    adjacency_dict_radius(adjacency_dict)
+    iterative_adjacency_matrix_bfs(adjacency_matrix, 0)
+    iterative_adjacency_dict_bfs(adjacency_dict, 0)
+    iterative_adjacency_matrix_dfs(adjacency_matrix, 0)
+    iterative_adjacency_dict_dfs(adjacency_dict, 0)
+    recursive_adjacency_matrix_dfs(adjacency_matrix, 0)
+
+    generate_chart(execution_times)
+
     import doctest
     doctest.testmod()
