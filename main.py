@@ -40,13 +40,13 @@ def generate_chart(exec_times):
     print("Function names:", func_names)
     print("Average times:", avg_times)
 
-    plt.figure(figsize=(12, 8))  # Adjust the figure size to make it larger
+    plt.figure(figsize=(12, 8))
     plt.bar(func_names, avg_times)
     plt.xlabel('Function', fontsize=14)
     plt.ylabel('Average Execution Time (seconds)', fontsize=14)
     plt.title('Average Execution Time of Functions', fontsize=16)
-    plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotate x-tick labels and adjust font size
-    plt.tight_layout()  # Adjust layout to fit everything nicely
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.tight_layout()
     plt.show()
 
 
@@ -111,27 +111,23 @@ def read_adjacency_dict(filename: str, is_oriented: bool) -> dict[int, list[int]
     :param str filename: path to file
     :returns dict: the adjacency dict of a given graph
     """
-    nodes = set()
-    graph = {}
+    res = {}
     with open(filename, 'r', encoding='utf-8') as file:
+        file = file.readlines()[1:-1]
         for line in file:
-            line  = line.rstrip().split(',')
-            for node in line:
-                if node not in nodes:
-                    nodes.add(node)
-                    graph[node] = []
-            if len(graph.keys()) == len(nodes):
-                if is_oriented:
-                    for i, el in enumerate(line):
-                        if i == 0:
-                            graph[el].append(line[1])
-                else:
-                    for i, el in enumerate(line):
-                        if i == 0:
-                            graph[el].append(line[1])
-                        elif i == 1:
-                            graph[el].append(line[0])
-    return graph
+            line = line.strip().replace("->", '').replace(';', '').split()
+            top1, top2 = int(line[0]), int(line[1])
+
+            if top1 not in res:
+                res[top1] = []
+            if top2 not in res:
+                res[top2] = []
+            res[top1].append(top2)
+
+            if not is_oriented:
+                res[top2].append(top1)
+    return res
+
 
 @time_it
 def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
@@ -192,7 +188,8 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     return res
 
 @time_it
-def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_oriented: bool) -> list[int]:
+def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int,\
+    is_oriented: bool) -> list[int]:
     """
     Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
