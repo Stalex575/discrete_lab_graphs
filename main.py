@@ -401,7 +401,7 @@ if __name__ == "__main__":
     FILE_NAME = 'input.dot'
 
     adjacency_matrix = read_adjacency_matrix(FILE_NAME)
-    adjacency_dict = read_adjacency_dict(FILE_NAME)
+    adjacency_dict = read_adjacency_dict(FILE_NAME, True)
 
     adjacency_matrix_radius(adjacency_matrix)
     adjacency_dict_radius(adjacency_dict)
