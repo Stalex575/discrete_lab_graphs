@@ -38,23 +38,51 @@ def read_adjacency_matrix(filename: str) -> list[list]:
         return res
 
 
-def read_adjacency_dict(filename: str) -> dict[int, list[int]]:
+# def read_adjacency_dict(filename: str) -> dict[int, list[int]]:
+#     """
+#     Yanryna Zabchuk
+#     :param str filename: path to file
+#     :returns dict: the adjacency dict of a given graph
+#     """
+#     res = {}
+#     with open(filename, 'r', encoding='utf-8') as file:
+#         file = file.readlines()[1:-1]
+#         for line in file:
+#             line = line.strip().replace("->", '').replace(';', '').split()
+#             top1, top2 = int(line[0]), int(line[1])
+#             if top1 not in res:
+#                 res[top1] = [top2]
+#             else:
+#                 res[top1].append(top2)
+#     return res
+
+def read_adjacency_dict(filename: str, is_oriented: bool) -> dict[int, list[int]]:
     """
     Yanryna Zabchuk
     :param str filename: path to file
     :returns dict: the adjacency dict of a given graph
     """
-    res = {}
+    nodes = set()
+    graph = {}
     with open(filename, 'r', encoding='utf-8') as file:
-        file = file.readlines()[1:-1]
         for line in file:
-            line = line.strip().replace("->", '').replace(';', '').split()
-            top1, top2 = int(line[0]), int(line[1])
-            if top1 not in res:
-                res[top1] = [top2]
-            else:
-                res[top1].append(top2)
-    return res
+            line  = line.rstrip().split(',')
+            for node in line:
+                if node not in nodes:
+                    nodes.add(node)
+                    graph[node] = []
+            if len(graph.keys()) == len(nodes):
+                if is_oriented:
+                    for i, el in enumerate(line):
+                        if i == 0:
+                            graph[el].append(line[1])
+                else:
+                    for i, el in enumerate(line):
+                        if i == 0:
+                            graph[el].append(line[1])
+                        elif i == 1:
+                            graph[el].append(line[0])
+    return graph
 
 
 def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
