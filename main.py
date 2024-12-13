@@ -6,6 +6,7 @@ import time
 import matplotlib.pyplot as plt
 
 execution_times = {}
+radius_times = {}
 
 def time_it(func):
     """
@@ -20,9 +21,11 @@ def time_it(func):
         end_time = time.time()
         elapsed_time = end_time - start_time
 
-        if func.__name__ not in execution_times:
-            execution_times[func.__name__] = []
-        execution_times[func.__name__].append(elapsed_time)
+        if func.__name__ not in execution_times or func.__name__ not in radius_times:
+            if 'radius' in func.__name__:
+                radius_times[func.__name__] = elapsed_time
+            else:
+                execution_times[func.__name__] = elapsed_time
 
         return result
     return wrapper
@@ -35,7 +38,7 @@ def generate_chart(exec_times):
     :param dict exec_times: a dictionary containing the execution times of the functions
     """
     func_names = list(exec_times.keys())
-    avg_times = [sum(times) / len(times) for times in exec_times.values()]
+    avg_times = list(exec_times.values())
 
     print("Function names:", func_names)
     print("Average times:", avg_times)
@@ -52,7 +55,6 @@ def generate_chart(exec_times):
 
 def read_incidence_matrix(filename: str) -> list[list]:
     """
-    Stanik Oleksandr
     :param str filename: path to file
     :returns list[list]: the incidence matrix of a given graph
     """
@@ -80,7 +82,6 @@ def read_incidence_matrix(filename: str) -> list[list]:
 
 def read_adjacency_matrix(filename: str) -> list[list]:
     """
-    Yaryna Zabchuk
     :param str filename: path to file
     :returns list[list]: the adjacency matrix of a given graph
     """
@@ -107,7 +108,6 @@ def read_adjacency_matrix(filename: str) -> list[list]:
 
 def read_adjacency_dict(filename: str, is_oriented: bool) -> dict[int, list[int]]:
     """
-    Yanryna Zabchuk
     :param str filename: path to file
     :returns dict: the adjacency dict of a given graph
     """
@@ -132,7 +132,6 @@ def read_adjacency_dict(filename: str, is_oriented: bool) -> dict[int, list[int]
 @time_it
 def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
-    Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -161,7 +160,6 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
 @time_it
 def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     """
-    Yanryna Zabchuk
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -191,7 +189,6 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
 def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int,\
     is_oriented: bool) -> list[int]:
     """
-    Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -227,7 +224,6 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int,\
 @time_it
 def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[int]:
     """
-    Yanryna Zabchuk
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
@@ -259,7 +255,6 @@ def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[in
 @time_it
 def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
-    Stadnik Oleksandr
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
@@ -285,7 +280,6 @@ def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
 @time_it
 def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
     """
-    Stanik Oleksandr
     :param dict graph: the adjacency matrix of a given graph
     :param int start: start vertex of search
     :returns list[int]: the bfs traversal of the graph
@@ -391,6 +385,7 @@ if __name__ == "__main__":
     recursive_adjacency_matrix_dfs(adjacency_matrix, 0)
 
     generate_chart(execution_times)
+    generate_chart(radius_times)
 
     import doctest
     doctest.testmod()
