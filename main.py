@@ -59,6 +59,7 @@ def read_adjacency_dict(filename: str, is_oriented: bool) -> dict[int, list[int]
 
             if not is_oriented:
                 res[top2].append(top1)
+    res = {v:sorted(key) for v, key in res.items()}
     return res
 
 
@@ -72,6 +73,14 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
     [0, 1, 2]
     >>> iterative_adjacency_dict_dfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0)
     [0, 1, 2, 3]
+    >>> graph = {0: [1, 2, 3], 1: [0, 4], 2: [0, 5, 6], 3: [0, 7], 4: [1, 8], 5: [2, 9, 10], 
+    ... 6: [2, 11], 7: [3, 12], 8: [4, 13], 9: [5], 10: [5], 11: [6], 12: [7], 
+    ... 13: [8, 14], 14: [13]}
+    >>> iterative_adjacency_dict_dfs(graph, 0)
+    [0, 1, 4, 8, 13, 14, 2, 5, 9, 10, 6, 11, 3, 7, 12]
+    >>> graph = {0: [1, 2, 3], 1: [0, 4, 5], 2: [0], 3: [0, 7], 4: [1, 6], 5: [1], 6: [4], 7: [3]}
+    >>> iterative_adjacency_dict_dfs(graph, 0)
+    [0, 1, 4, 6, 5, 2, 3, 7]
     """
     num_vertises = len(graph)
 
@@ -80,13 +89,15 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
     res = []
 
     while stack:
-        v = stack.pop(0)
+        v = stack.pop()
         if not visited[v]:
             visited[v] = True
             res.append(v)
+            neib = []
             for n in graph[v]:
                 if not visited[n]:
-                    stack.append(n)
+                    neib.append(n)
+            stack.extend(reversed(neib))
 
     return res
 
@@ -102,6 +113,18 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     [0, 1, 2]
     >>> iterative_adjacency_matrix_dfs([[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]], 0)
     [0, 1, 2, 3]
+    >>> graph = [
+    ... [0, 1, 1, 1, 0, 0, 0, 0],
+    ... [1, 0, 0, 0, 1, 1, 0, 0],
+    ... [1, 0, 0, 0, 0, 0, 0, 0],
+    ... [1, 0, 0, 0, 0, 0, 0, 1],
+    ... [0, 1, 0, 0, 0, 0, 1, 0],
+    ... [0, 1, 0, 0, 0, 0, 0, 0],
+    ... [0, 0, 0, 0, 1, 0, 0, 0],
+    ... [0, 0, 0, 1, 0, 0, 0, 0]
+    ... ]
+    >>> iterative_adjacency_matrix_dfs(graph, 0)
+    [0, 1, 4, 6, 5, 2, 3, 7]
     """
     num_vertices = len(graph)
 
@@ -110,27 +133,39 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     res = []
 
     while len(stack) != 0:
-        v = stack.pop(0)
+        v = stack.pop()
         if not visited[v]:
             visited[v] = True
             res.append(v)
+            neib = []
             for n in range(num_vertices):
                 if graph[v][n] and not visited[n]:
-                    stack.append(n)
+                    neib.append(n)
+            stack.extend(reversed(neib))
 
     return res
 
 
-def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_oriented: bool) -> list[int]:
+def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
     Yaryna Zabchuk
     :param list[list] graph: the adjacency list of a given graph
     :param int start: start vertex of search
     :returns list[int]: the dfs traversal of the graph
-    >>> recursive_adjacency_dict_dfs({0: [1, 2], 1: [0, 2], 2: [0, 1]}, 0, 0)
+    >>> recursive_adjacency_dict_dfs({0: [1, 2], 1: [0, 2], 2: [0, 1]}, 0)
     [0, 1, 2]
-    >>> recursive_adjacency_dict_dfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0, 1)
+    >>> recursive_adjacency_dict_dfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0)
     [0, 1, 2, 3]
+    >>> iterative_adjacency_dict_dfs({0: [1, 2], 1: [0, 2, 3], 2: [0, 1], 3: []}, 0)
+    [0, 1, 2, 3]
+    >>> graph1 = {0: [1, 2, 3], 1: [0, 4], 2: [0, 5, 6], 3: [0, 7], 4: [1, 8], 5: [2, 9, 10], 
+    ... 6: [2, 11], 7: [3, 12], 8: [4, 13], 9: [5], 10: [5], 11: [6], 12: [7], 
+    ... 13: [8, 14], 14: [13]}
+    >>> recursive_adjacency_dict_dfs(graph1, 0)
+    [0, 1, 4, 8, 13, 14, 2, 5, 9, 10, 6, 11, 3, 7, 12]
+    >>> graph = {0: [1, 2, 3], 1: [0, 4, 5], 2: [0], 3: [0, 7], 4: [1, 6], 5: [1], 6: [4], 7: [3]}
+    >>> recursive_adjacency_dict_dfs(graph, 0)
+    [0, 1, 4, 6, 5, 2, 3, 7]
     """
     num_vertises = len(graph)
 
@@ -146,11 +181,7 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int, is_ori
         res.append(v)
         for neighbor in graph[v]:
             if not visited[neighbor]:
-                if is_oriented:
-                    if neighbor in graph[v]:
-                        dfs(neighbor, res)
-                else:
-                    dfs(neighbor, res)
+                dfs(neighbor, res)
 
     dfs(start, res)
 
