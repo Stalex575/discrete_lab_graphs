@@ -323,6 +323,18 @@ def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[in
     [0, 1, 2]
     >>> iterative_adjacency_matrix_bfs([[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]], 0)
     [0, 1, 2, 3]
+    >>> graph = {0: [1, 2, 3], 1: [0, 4], 2: [0, 5, 6], 3: [0, 7], 4: [1, 8], 5: [2, 9, 10],
+    ... 6: [2, 10, 11], 7: [3, 12], 8: [4, 13], 9: [5, 13], 10: [5, 6], 11: [6], 12: [7, 13], 
+    ... 13: [8, 9, 12, 14], 14: [13]}
+    >>> iterative_adjacency_dict_bfs(graph, 0)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    >>> graph = {1: [7, 8], 2: [3, 4, 5, 7, 8], 3: [2, 4, 5], 4: [2, 3, 6],
+    ... 5: [2, 3, 8], 6: [4, 7], 7: [1, 2, 6], 8: [1, 2, 5]}
+    >>> iterative_adjacency_dict_bfs(graph, 1)
+    [1, 7, 8, 2, 6, 5, 3, 4]
+    >>> graph = {0: [1, 3], 1: [2, 4], 2: [], 3: [0, 2], 4: [2, 6], 5: [3], 6: [4]}
+    >>> iterative_adjacency_dict_bfs(graph, 0)
+    [0, 1, 3, 2, 4, 6]
     """
     visited = set()
     queue = deque([start])
@@ -423,4 +435,4 @@ if __name__ == "__main__":
     generate_chart(execution_times)
 
     import doctest
-    doctest.testmod()
+    print(doctest.testmod())
