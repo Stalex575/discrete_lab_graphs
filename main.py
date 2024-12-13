@@ -5,6 +5,7 @@ from collections import deque
 import time
 import matplotlib.pyplot as plt
 
+
 execution_times = {}
 radius_times = {}
 
@@ -40,14 +41,11 @@ def generate_chart(exec_times):
     func_names = list(exec_times.keys())
     avg_times = list(exec_times.values())
 
-    print("Function names:", func_names)
-    print("Average times:", avg_times)
-
     plt.figure(figsize=(12, 8))
     plt.bar(func_names, avg_times)
     plt.xlabel('Function', fontsize=14)
-    plt.ylabel('Average Execution Time (seconds)', fontsize=14)
-    plt.title('Average Execution Time of Functions', fontsize=16)
+    plt.ylabel('Execution Time (seconds)', fontsize=14)
+    plt.title('Execution Time of Functions', fontsize=16)
     plt.xticks(rotation=45, ha='right', fontsize=10)
     plt.tight_layout()
     plt.show()
@@ -79,6 +77,7 @@ def read_incidence_matrix(filename: str) -> list[list]:
                 matrix[start][edge_index] = 1
                 matrix[end][edge_index] = -1
         return matrix
+
 
 def read_adjacency_matrix(filename: str) -> list[list]:
     """
@@ -157,6 +156,7 @@ def iterative_adjacency_dict_dfs(graph: dict[int, list[int]], start: int) -> lis
 
     return res
 
+
 @time_it
 def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
     """
@@ -184,6 +184,7 @@ def iterative_adjacency_matrix_dfs(graph: list[list], start: int) ->list[int]:
                     stack.append(n)
 
     return res
+
 
 @time_it
 def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int,\
@@ -221,6 +222,7 @@ def recursive_adjacency_dict_dfs(graph: dict[int, list[int]], start: int,\
 
     return res
 
+
 @time_it
 def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[int]:
     """
@@ -252,6 +254,7 @@ def recursive_adjacency_matrix_dfs(graph: list[list[int]], start: int) ->list[in
 
     return res
 
+
 @time_it
 def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> list[int]:
     """
@@ -277,6 +280,7 @@ def iterative_adjacency_dict_bfs(graph: dict[int, list[int]], start: int) -> lis
                 visited.add(neighbour)
     return bfs_order
 
+
 @time_it
 def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[int]:
     """
@@ -301,6 +305,7 @@ def iterative_adjacency_matrix_bfs(graph: list[list[int]], start: int) ->list[in
                 queue.append(neighbour)
                 visited.add(neighbour)
     return bfs_order
+
 
 @time_it
 def adjacency_matrix_radius(graph: list[list]) -> int:
@@ -335,6 +340,7 @@ def adjacency_matrix_radius(graph: list[list]) -> int:
 
     return min(eccentricities)
 
+
 @time_it
 def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
     """
@@ -367,7 +373,6 @@ def adjacency_dict_radius(graph: dict[int: list[int]]) -> int:
         eccentricities.append(max(dist_ver.values()))
 
     return min(eccentricities)
-
 
 
 if __name__ == "__main__":
